@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="ja">
+
+<head>
+    <title>【note】スキをくれたお友だち</title>
+
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://licodeenar.github.io/notelikes/img/og-image.png">
+    <meta property="og:title" content="【note】スキをくれたお友だち">
+    <meta property="og:description" content="直近の記事からスキをくれたユーザを集計します。">
+    <meta property="og:locale" content="ja_JP">
+    <link rel="icon" href="img/favicon.png">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link media="all" href="assets/style.css" rel="stylesheet">
+    <script type='text/javascript' src='assets/script.js'></script>
+
+</head>
+
+<body>
+    <header>
+        <a href="https://note.com/licodeenar/n/nf0a0aab51a07"><img class="cp_icon" src="img/favicon.png"></a>
+    </header>
+    <main class="cat_top">
+        <div class="cp_contents">
+            <h1>【note】スキをくれたお友だち</h1>
+            <div class="cp_explain">
+                ・直近の記事からスキをくれたユーザを集計します。
+                <br>・上位50人を表示します。
+                <br>・記事数が多いほど取得に時間がかかります。
+            </div><br>
+            <!-- 情報入力 -->
+            <form id="setting" action="JavaScript:getNoteList()">
+                <div class="cp_radio">
+                    <input type="radio" id="note_key1" name="note_key" value="article60" checked="checked">
+                    <label for="note_key1">直近60記事</label><br>
+                    <input type="radio" id="note_key2" name="note_key" value="article120">
+                    <label for="note_key2">直近120記事</label><br>
+                    <input type="radio" id="note_key3" name="note_key" value="article240">
+                    <label for="note_key3">直近240記事</label><br>
+                </div><br>
+                <input type="text" class="cp_input" id="note_id" placeholder="noteのIDを入力"><br>
+                <input type="button" class="cp_button" id="note_exe" value="スキを集計する" onclick="getNoteList()"><br>
+                <input type="checkbox" name="note_json" id="note_json">
+                <label for="note_json" class="cp_checkbox_data_json">JSON形式で表示する</label>
+            </form>
+            <script>
+                document.getElementById('note_id').focus();
+            </script>
+
+            <!--- 実行結果を表示 --->
+            <div id="note_result" class="result-table"></div>
+
+        </div>
+    </main>
+
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-L8WE2GBHQ3"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag("js", new Date());
+
+        gtag("config", "G-L8WE2GBHQ3");
+    </script>
+    <!-- // ここまで Google Analytics -->
+</body>
+
+</html>

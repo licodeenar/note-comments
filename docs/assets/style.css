@@ -1,0 +1,324 @@
+@charset "UTF-8";
+@import url("https://fonts.googleapis.com/css?family=Open+Sans:400,700");
+html {
+    font-size: 62.5%;
+}
+
+body {
+    font-size: 2.0rem;
+    margin: 0px;
+    text-align: center;
+    color: #333;
+    font-family: "Open Sans", "游ゴシック体", YuGothic, "游ゴシック Medium", "Yu Gothic Medium", "游ゴシック", "Yu Gothic", sans-serif;
+}
+
+header .cp_icon {
+    width: 32px;
+}
+
+a {
+    color: #da99b5;
+}
+
+@media (max-width: 670px) {
+    /* スマホ */
+    main {
+        margin: 0 auto;
+        width: 100%;
+    }
+    header {
+        text-align: right;
+        padding: 8px 20px;
+        height: 32px;
+        margin: 0px;
+        border-bottom: solid 1px #ccc;
+    }
+    h1 {
+        font-size: 2.5rem;
+    }
+    .cp_explain {
+        text-align: left;
+        display: inline-block;
+        margin: 30px 0px 10px 0px;
+        font-size: 1.6rem;
+    }
+    .cp_explain_sub {
+        text-align: left;
+        display: inline-block;
+        margin: 10px 0px 30px 0px;
+        font-size: 1.2rem;
+        color: #888;
+    }
+}
+
+@media (max-width: 1100px) and (min-width: 671px) {
+    /* タブレット */
+    main {
+        margin: 0 auto;
+        width: 671px;
+    }
+    header {
+        text-align: right;
+        padding: 16px 20px;
+        height: 32px;
+        margin: 0px;
+        border-bottom: solid 1px #ccc;
+    }
+    h1 {
+        font-size: 3.5rem;
+    }
+    .cp_explain {
+        text-align: left;
+        display: inline-block;
+        margin: 30px 0px 10px 0px;
+    }
+    .cp_explain_sub {
+        text-align: left;
+        display: inline-block;
+        margin: 10px 0px 30px 0px;
+        font-size: 1.3rem;
+        color: #888;
+    }
+}
+
+@media (min-width: 1101px) {
+    /* パソコン */
+    main {
+        margin: 0 auto;
+        width: 671px;
+    }
+    header {
+        text-align: right;
+        padding: 16px 20px;
+        height: 32px;
+        margin: 0px;
+        border-bottom: solid 1px #ccc;
+    }
+    h1 {
+        font-size: 3.5rem;
+    }
+    .cp_explain {
+        text-align: left;
+        display: inline-block;
+        margin: 30px 0px 10px 0px;
+    }
+    .cp_explain_sub {
+        text-align: left;
+        display: inline-block;
+        margin: 10px 0px 30px 0px;
+        font-size: 1.3rem;
+        color: #888;
+    }
+}
+
+.cp_contents {
+    margin: 20px;
+}
+
+
+/* テーブル */
+
+.note_list {
+    border-collapse: collapse;
+    border: solid 2px #da99b5;
+    width: 100%;
+}
+
+.note_list td {
+    padding: 20px 10px;
+    border: 1px #000;
+    color: #333;
+}
+
+.note_list th {
+    color: #da99b5;
+    background: #f4e3e5;
+    padding: 10px 20px;
+}
+
+td.note_follow {
+    width: 55px;
+}
+
+td.note_data_id {
+    width: 50px;
+    padding: 5px;
+}
+
+td.note_data_count {
+    width: 50px;
+    padding: 5px;
+}
+
+img.like_icon {
+    width: 24px;
+    height: 24px;
+    padding-top: 10px;
+}
+
+.note_data_id,
+.note_data_name,
+.note_data_count,
+.note_data_json {
+    font-size: 1.3rem;
+    color: #aaa;
+    /*
+    text-overflow: ellipsis;
+    -webkit-text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;
+    overflow: hidden;
+    width: 200px;
+    white-space: nowrap;
+    margin: 0 auto;
+    align-items: center; */
+}
+
+.note_list th,
+.note_list td {
+    border: dashed 1px #da99b5;
+}
+
+.result-table {
+    margin: 40px 0px;
+    width: 100%;
+}
+
+
+/* インプット */
+
+.cp_input {
+    margin: 10px 0px;
+    box-sizing: border-box;
+    width: 100%;
+    padding: 2.0rem;
+    letter-spacing: 1px;
+    color: #333;
+    border: 1px solid #da99b5;
+    border-radius: 50vh;
+    font-size: 2.0rem;
+    font-family: "Open Sans", "游ゴシック体", YuGothic, "游ゴシック Medium", "Yu Gothic Medium", "游ゴシック", "Yu Gothic", sans-serif;
+    outline: none;
+}
+
+
+/* ボタン */
+
+.cp_button {
+    -webkit-appearance: none;
+    margin: 10px 0px;
+    color: #fff;
+    background-color: #da99b5;
+    border-radius: 100vh;
+    border: 0px;
+    padding: 2.0rem 4.0rem;
+    font-size: 2.0rem;
+    font-family: "Open Sans", "游ゴシック体", YuGothic, "游ゴシック Medium", "Yu Gothic Medium", "游ゴシック", "Yu Gothic", sans-serif;
+    outline: none;
+}
+
+.cp_button:active {
+    background-color: #ffc3da;
+    outline: none;
+}
+
+
+/* ラジオボタン */
+
+.cp_radio {
+    text-align: left;
+    display: inline-block;
+    margin: 10px 0px;
+}
+
+.cp_radio label {
+    padding: 0 0 0 32px;
+    /* ラベルの位置 */
+    line-height: 33px;
+    /* ボタンのサイズに合わせる */
+    display: inline-block;
+    cursor: pointer;
+    position: relative;
+}
+
+.cp_radio label:before {
+    content: '';
+    width: 28px;
+    /* ボタンの横幅 */
+    height: 28px;
+    /* ボタンの縦幅 */
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: #da99b5;
+    border-radius: 50%;
+}
+
+.cp_radio input[type="radio"] {
+    display: none;
+}
+
+.cp_radio input[type="radio"]:checked+label:after {
+    content: '';
+    width: 10px;
+    /* マークの横幅 */
+    height: 10px;
+    /* マークの縦幅 */
+    position: absolute;
+    top: 9px;
+    left: 9px;
+    background-color: #fff;
+    border-radius: 50%;
+}
+
+
+/* チェックボックス */
+
+.cp_checkbox_data_json {
+    font-size: 1.5rem;
+    color: #888;
+}
+
+input[type=checkbox] {
+    display: none;
+}
+
+.cp_checkbox_data_json {
+    box-sizing: border-box;
+    cursor: pointer;
+    display: inline-block;
+    padding: 5px 30px;
+    position: relative;
+    width: auto;
+}
+
+.cp_checkbox_data_json::before {
+    background: #fff;
+    border: 1px solid #888;
+    content: '';
+    display: block;
+    height: 16px;
+    width: 16px;
+    left: 5px;
+    margin-top: -8px;
+    position: absolute;
+    top: 50%;
+}
+
+.cp_checkbox_data_json::after {
+    border-right: 3px solid #da99b5;
+    border-bottom: 3px solid #da99b5;
+    content: '';
+    display: block;
+    height: 9px;
+    left: 10px;
+    margin-top: -7px;
+    opacity: 0;
+    position: absolute;
+    top: 50%;
+    transform: rotate(45deg);
+    width: 5px;
+}
+
+input[type=checkbox]:checked+.cp_checkbox_data_json::after {
+    opacity: 1;
+}
