@@ -17,7 +17,7 @@ header .cp_icon {
 }
 
 a {
-    color: #da99b5;
+    color: #33a0d3;
 }
 
 @media (max-width: 670px) {
@@ -120,7 +120,7 @@ a {
 
 .note_list {
     border-collapse: collapse;
-    border: solid 2px #da99b5;
+    border: solid 2px #33a0d3;
     width: 100%;
 }
 
@@ -131,8 +131,8 @@ a {
 }
 
 .note_list th {
-    color: #da99b5;
-    background: #f4e3e5;
+    color: #33a0d3;
+    background: #edf8fd;
     padding: 10px 20px;
 }
 
@@ -175,7 +175,7 @@ img.like_icon {
 
 .note_list th,
 .note_list td {
-    border: dashed 1px #da99b5;
+    border: dashed 1px #33a0d3;
 }
 
 .result-table {
@@ -193,7 +193,7 @@ img.like_icon {
     padding: 2.0rem;
     letter-spacing: 1px;
     color: #333;
-    border: 1px solid #da99b5;
+    border: 1px solid #33a0d3;
     border-radius: 50vh;
     font-size: 2.0rem;
     font-family: "Open Sans", "游ゴシック体", YuGothic, "游ゴシック Medium", "Yu Gothic Medium", "游ゴシック", "Yu Gothic", sans-serif;
@@ -207,7 +207,7 @@ img.like_icon {
     -webkit-appearance: none;
     margin: 10px 0px;
     color: #fff;
-    background-color: #da99b5;
+    background-color: #33a0d3;
     border-radius: 100vh;
     border: 0px;
     padding: 2.0rem 4.0rem;
@@ -217,7 +217,7 @@ img.like_icon {
 }
 
 .cp_button:active {
-    background-color: #ffc3da;
+    background-color: #3ec5ff;
     outline: none;
 }
 
@@ -249,7 +249,7 @@ img.like_icon {
     position: absolute;
     top: 0;
     left: 0;
-    background-color: #da99b5;
+    background-color: #33a0d3;
     border-radius: 50%;
 }
 
@@ -305,8 +305,8 @@ input[type=checkbox] {
 }
 
 .cp_checkbox_data_json::after {
-    border-right: 3px solid #da99b5;
-    border-bottom: 3px solid #da99b5;
+    border-right: 3px solid #33a0d3;
+    border-bottom: 3px solid #33a0d3;
     content: '';
     display: block;
     height: 9px;
