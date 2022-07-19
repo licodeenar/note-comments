@@ -184,6 +184,26 @@ img.like_icon {
 }
 
 
+/* 記事リスト */
+
+.article_list {
+    font-size: 1.3rem;
+    text-align: left;
+    display: none;
+}
+
+.detail {
+    font-size: 1.3rem;
+    text-align: right;
+    color: #333;
+}
+
+.detail a {
+    color: #333;
+    text-decoration: none;
+}
+
+
 /* インプット */
 
 .cp_input {

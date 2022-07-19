@@ -51,12 +51,42 @@ function drawTable(jasons, elementId, isJson) {
                     (i + 1) + '位</td><td>' +
                     '<a href="' + obj[i].url + '" target="_blank">' +
                     obj[i].urlname + '</a><br><div class="note_data_name">' +
-                    obj[i].nickname + '</div></td><td class="note_data_count">' +
+                    obj[i].nickname + '</div>' +
+                    '<div class="detail">&lt;&lt; <a href="javascript:setDisplay(\'articles_' + i + '\');">詳しくみる</a></div>' +
+                    '<div class="article_list" id="articles_' + i + '">' +
+                    getArticles(obj[i].articles) +
+                    '</div></td><td class="note_data_count">' +
                     obj[i].count + '</td></tr>';
             }
             html += '</table>';
 
             document.getElementById(elementId).innerHTML = html;
         }
+    }
+}
+
+function getArticles(articles) {
+    let html = '';
+    for (let i = 0; i < articles.length; i++) {
+        let title = articles[i].article_name;
+        if (title == null || title == '') {
+            title = '[タイトルなし]';
+        }
+        html += i + 1 + '. ' + '<a href="' +
+            articles[i].article_url + '" target="_blank">' +
+            title + '</a><br>';
+    }
+    return html;
+}
+
+function setDisplay(idName) {
+    const doc = document.getElementById(idName);
+
+    if (doc.style.display === 'block') {
+        // noneで非表示
+        doc.style.display = 'none';
+    } else {
+        // blockで表示
+        doc.style.display = 'block';
     }
 }
