@@ -1,7 +1,7 @@
 'use strict';
 
 function debug() {
-    let json = main('licodeenar', 'article60');
+    let json = main('licodeenar', 'article240');
 
     console.log(json);
 }
@@ -45,9 +45,10 @@ function getArticles(apiURL, maxRepeat, maxFetch) {
             // リクエストを生成
             const start = repeat * maxFetch + 1;
             const end = start + maxFetch;
-            for (let i = start; i <= end; i++) {
+            for (let i = start; i < end; i++) {
                 requests.push(apiURL + i);
             }
+
 
             // 非同期でまとめて取得
             const responses = UrlFetchApp.fetchAll(requests);
