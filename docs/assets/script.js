@@ -9,7 +9,7 @@ function getNoteList() {
     let isJson = form.note_json.checked;
 
     //テーブルをクリア＆フォームをロック
-    document.getElementById(resultDispId).innerHTML = 'しばらく時間がかかります。。。';
+    document.getElementById(resultDispId).innerHTML = 'しばらく時間がかかります。。。<br><br><br>';
     setFormDisabled(true);
 
     req.open("GET", url, true);
@@ -38,7 +38,7 @@ function drawTable(jasons, elementId, isJson) {
     let html = '';
 
     if (jasons == '"error"' || jasons == '') {
-        document.getElementById(elementId).innerHTML = '情報を取得できませんでした。';
+        document.getElementById(elementId).innerHTML = '情報を取得できませんでした。<br><br><br>';
     } else {
         if (isJson) {
             // JSONのまま表示
