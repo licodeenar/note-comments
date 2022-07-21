@@ -1,7 +1,7 @@
 'use strict';
 
 function debug() {
-    let json = main('licodeenar', 'article240');
+    let json = main('licodeenar', 'article60');
 
     console.log(json);
 }
@@ -74,7 +74,7 @@ function getArticles(apiURL, maxRepeat, maxFetch) {
 function totalCommentUser(noteURL, articles) {
     let pages = [];
 
-    for (let repeat = 0; repeat < articles.length; repeat++) {
+    for (let repeat = 0; repeat * CONF.FETCH_MAX < articles.length; repeat++) {
         let requests = [];
         let articleURLs = [];
 
@@ -170,8 +170,8 @@ function getRestComment(articleURL, articleName, url, maxID) {
     const json_data = JSON.parse(response.getContentText('UTF-8'))['data'];
     let result = [];
 
-    console.log('残コメント：' + json_data.rest_comment_count);
-    console.log('記事URL：' + articleURL + ';');
+    //console.log('残コメント：' + json_data.rest_comment_count);
+    //console.log('記事URL：' + articleURL + ';');
 
     // JSONデータを生成する
     for (let i = 0; i < json_data['comments'].length; i++) {
@@ -188,7 +188,7 @@ function getRestComment(articleURL, articleName, url, maxID) {
     if (json_data.rest_comment_count > 0) {
         // 残コメントがある場合は、再帰呼び出し
         const newMaxID = json_data['comments'][json_data['comments'].length - 1].id;
-        console.log(newMaxID);
+        //console.log(newMaxID);
         return result.concat(getRestComment(articleURL, url, newMaxID));
     } else {
         // 残コメントがなければ終了
