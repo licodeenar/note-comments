@@ -9,7 +9,7 @@ function getNoteList() {
     let isJson = form.note_json.checked;
 
     //テーブルをクリア＆フォームをロック
-    document.getElementById(resultDispId).innerHTML = 'しばらく時間がかかります。。。<br><br><br>';
+    document.getElementById(resultDispId).innerHTML = '<img src="img/waiting.gif"><br>しばらく時間がかかります。。。<br><br><br>';
     setFormDisabled(true);
 
     req.open("GET", url, true);
