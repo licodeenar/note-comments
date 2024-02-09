@@ -130,7 +130,7 @@ function totalCommentUser(noteURL, articles){
 
   //配列をカウント数で並び替えソート
   commentList.sort( (a, b) => {
-    return b[b.length - 2] - a[a.length - 2];
+    return b[b.length - 3] - a[a.length - 3];
   });
 
   //ランキングJSONを返す
