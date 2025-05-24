@@ -24,12 +24,7 @@
     </header>
     <main class="cat_top">
         <div class="cp_contents">
-            <h1>【note】コメントをくれたお友だち</h1>
-            <div class="cp_explain">
-                ・直近の記事にコメントをくれたユーザを集計します。
-                <br>・上位50人を表示します。
-                <br>・記事数が多いほど取得に時間がかかります。
-            </div><br>
+            <h1>【note】コメントを集計</h1>
             <!-- 情報入力 -->
             <form id="setting" action="JavaScript:getNoteList()">
                 <div class="cp_radio">
@@ -51,6 +46,12 @@
 
             <!--- 実行結果を表示 --->
             <div id="note_result" class="result-table"></div>
+
+            <div class="cp_explain">
+                ・記事にコメントをくれたユーザを集計します。<br>
+                ・コメンす数が多い順に50人を表示します。<br>
+                ・指定した記事の数が多いほど時間がかかります。
+            </div><br>
 
         </div>
     </main>
