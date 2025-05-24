@@ -45,10 +45,10 @@ function drawTable(jasons, elementId, isJson) {
             document.getElementById(elementId).innerHTML = '<span class="note_data_json">' + jasons + '</span>';
         } else {
             obj = JSON.parse(jasons);
-            html = '<table class="note_list"><tr><th>#</th><th>なまえ / ID</th><th><img class="like_icon" src="img/comment.svg"></th></tr>'
+            html = '<table class="note_list"><tr><!-- th>#</th --><th>なまえ / ID</th><th><img class="like_icon" src="img/comment.svg"></th></tr>'
             for (let i = 0; i < obj.length; i++) {
-                html += '<tr><td class="note_data_id">' +
-                    (i + 1) + '位</td>' + 
+                html += '<tr>' +
+                    //'<td class="note_data_id">' + (i + 1) + '</td>' + 
                     '<td>' +
                     '<div class="note_data_container">' +
                     '<div class="note_icon"><a href="' + obj[i].url + '" target="_blank">' + 
