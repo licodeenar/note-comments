@@ -18,6 +18,31 @@
 
 </head>
 
+<script>
+window.onload = function() {
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get('id');
+    const key = params.get('key');
+    const json = params.get('json'); // "true" でチェック
+
+    if (id && key) {
+        document.getElementById('note_id').value = id;
+
+        // 対応するラジオボタンにチェック
+        const keyRadio = document.querySelector(`input[name="note_key"][value="${key}"]`);
+        if (keyRadio) keyRadio.checked = true;
+
+        // JSON表示のチェックボックス
+        if (json === "true") {
+            document.getElementById('note_json').checked = true;
+        }
+
+        // 自動実行
+        getNoteList();
+    }
+};
+</script>
+
 <body>
     <header>
         <a href="https://note.com/licodeenar/n/n89744be9ade9"><img class="cp_icon" src="img/favicon.png"></a>
