@@ -152,6 +152,9 @@ a {
     font-size: 1.6rem;
     font-weight: bold;
     text-align: left;
+    max-width: 100%;
+    word-break: break-word;
+    overflow-wrap: break-word;
 }
 
 .note_list {
