@@ -76,7 +76,9 @@ function totalCommentUser(noteURL, articles){
   for(let repeat = 0; repeat * CONF.FETCH_MAX < articles.length; repeat++){
     let requests = [];
     let articleURLs = [];
-
+    let requests_v3 = [];
+    let articleURLs_v3 = [];
+  
     // リクエストを生成
     const start = repeat * CONF.FETCH_MAX;
     let end = start + CONF.FETCH_MAX;
@@ -84,49 +86,52 @@ function totalCommentUser(noteURL, articles){
       end = articles.length;
     }
     for(let i = start; i < end; i++){
-      requests.push(CONF.API_CMNT_URL + articles[i].id + '/comments');
-      articleURLs.push([
-        noteURL + articles[i].key, 
-        CONF.API_CMNT_URL + articles[i].id + '/comments',
-        articles[i].name
-      ]);
-    }
+      //新しいコメントタイプかチェック
+      const isNoteComment = articles[i].capabilities.noteComment;
 
-    // 非同期でまとめて取得
-    const responses = UrlFetchApp.fetchAll(requests);
-
-    for(let i = 0; i < responses.length; i++){
-      const json_data = JSON.parse(responses[i].getContentText('UTF-8'))['data'];
-
-      
-
-      //コメント情報を取得（50件MAX）
-      for(let j = 0; j < json_data['comments'].length; j++){
-        pages.push({
-          user_urlname: json_data['comments'][j].user.urlname,
-          user_nickname: json_data['comments'][j].user.nickname,
-          user_profile_image_path: json_data['comments'][j].user.user_profile_image_path,
-          comment:json_data['comments'][j].comment,
-          created_at:json_data['comments'][j].created_at,
-          article_url: articleURLs[i][0],
-          article_name: articleURLs[i][2]
-        });
-      }
-
-      //残コメントがある（50件以上コメントが続いている場合
-      if(json_data.rest_comment_count > 0){  
-        pages = pages.concat(
-          getRestComment(articleURLs[i][0], 
-          articleURLs[i][2],
-          articleURLs[i][1] + '?max_id=', 
-          json_data['comments'][json_data['comments'].length -1].id));
+      if(isNoteComment){
+        //新しいコメントタイプ v3
+        let commentUrl = CONF.API_CMNT_URL_V3.replace('[KEY]', articles[i].key);
+        requests_v3.push(commentUrl);
+        articleURLs_v3.push([
+          noteURL + articles[i].key, 
+          commentUrl,
+          articles[i].name,
+          articles[i].key
+        ]);
+      }else{
+        //古いコメントタイプ
+        requests.push(CONF.API_CMNT_URL + articles[i].id + '/comments');
+        articleURLs.push([
+          noteURL + articles[i].key, 
+          CONF.API_CMNT_URL + articles[i].id + '/comments',
+          articles[i].name
+        ]);
       }
     }
+
+    //新API
+    let fetch = [];
+    fetch = getCommentsFromNewApi(requests_v3, articleURLs_v3);
+    pages = pages.concat(fetch);
+
+    let params = getRequestChild(fetch, noteURL);
+    if(params.count > 0){
+      fetch = getCommentsFromNewApi(params.requests_v3, params.articleURLs_v3);
+      pages = pages.concat(fetch);
+    }
+
+    //旧API
+    fetch = getCommentsFromOldApi(requests, articleURLs);
+    pages = pages.concat(fetch);
+  
   }
 
   // LISTをJSON PAGESから作成する（ソートするため配列に変換）
   let commentList = [];
-  commentList = convertUserList(pages);
+  //commentList = convertUserList(pages); //コメント単位で集計
+  commentList = convertUserList(removeDuplicateArticles(pages)); //コメントを記事単位でDISTINCT
+  
 
   //配列をカウント数で並び替えソート
   commentList.sort( (a, b) => {
@@ -135,6 +140,193 @@ function totalCommentUser(noteURL, articles){
 
   //ランキングJSONを返す
   return commentListJSON(commentList);
+}
+
+// 親コメントを取得した後に、
+// 子コメントのリクエストをまとめて生成する
+function getRequestChild(parents, noteURL) {
+  let requests_v3 = [];
+  let articleURLs_v3 = [];
+
+  for (let i = 0; i < parents.length; i++) {
+    //子コメントがあるかチェック
+    let replay_count = parents[i].reply_count;
+
+    if(replay_count && replay_count > 0){
+      //新しいコメントタイプ v3
+      let commentUrl = CONF.API_CMNT_URL_V3.replace('[KEY]', parents[i].article_key) + 
+                      '&parent_key=' + parents[i].key;
+      requests_v3.push(commentUrl);
+      articleURLs_v3.push([
+        noteURL + parents[i].article_key, 
+        commentUrl,
+        parents[i].article_name
+      ]);
+    }
+  } 
+
+  const result = {
+    requests_v3: requests_v3,
+    articleURLs_v3: articleURLs_v3,
+    count: requests_v3.length
+  }
+
+  return result;
+}
+
+// 新しいAPIでコメントページを取得する
+function getCommentsFromNewApi(requests, articleURLs) {
+  let pages = [];
+  let remainingRequests = [];
+
+  // 非同期で複数の記事のコメントをまとめて取得
+  const responses = UrlFetchApp.fetchAll(requests);
+
+  for (let i = 0; i < responses.length; i++) {
+    const json_data = JSON.parse(responses[i].getContentText('UTF-8'));
+    const comments = json_data.data;
+
+    // 現在のページのコメントを処理
+    for (const comment of comments) {
+      const commentText = comment.comment.children[0].children[0].value;
+      pages.push({
+        user_urlname: comment.user.urlname,
+        user_nickname: comment.user.nickname,
+        user_profile_image_path: comment.user.profile_image_url,
+        comment: commentText,
+        created_at: comment.created_at,
+        article_url: articleURLs[i][0],
+        article_name: articleURLs[i][2],
+        article_key: articleURLs[i][3],
+        key: comment.key,
+        reply_count: comment.reply_count
+      });
+    }
+
+    // 次のページがある場合は、後でまとめて取得するために情報を記録
+    if (json_data.next_page !== null) {
+      remainingRequests.push({
+        articleURL: articleURLs[i][0],
+        articleName: articleURLs[i][2],
+        url: requests[i],
+        next_page: json_data.next_page,
+        article_key: articleURLs[i][3]
+      });
+    }
+  }
+
+  // ページが分かれる記事のコメントをまとめて取得
+  for (const req of remainingRequests) {
+    pages = pages.concat(getRestCommentsNewApi
+      (req.articleURL, req.articleName, req.url, req.article_key, req.next_page));
+  }
+
+  return pages;
+}
+
+// --------------------------------------------------
+//再帰的に残コメントを取得する
+function getRestCommentsNewApi(articleURL, articleName, url, articleKey, next_page) {
+  let allComments = [];
+  
+  try {
+    const response = UrlFetchApp.fetch(`${url}&page=${next_page}`);
+    const json_data = JSON.parse(response.getContentText('UTF-8'));
+    const comments = json_data.data;
+
+    // 現在のページのコメントを処理
+    for (const comment of comments) {
+      const commentText = comment.comment.children[0].children[0].value;
+      allComments.push({
+        user_urlname: comment.user.urlname,
+        user_nickname: comment.user.nickname,
+        user_profile_image_path: comment.user.profile_image_url,
+        comment: commentText,
+        created_at: comment.created_at,
+        article_url: articleURL,
+        article_name: articleName,
+        article_key: articleKey,
+        key: comment.key,
+        reply_count: comment.reply_count
+      });
+    }
+
+    // 次のページがあるかチェック
+    if (json_data.next_page !== null) {
+      // 再帰的に次のページを取得
+      return allComments.concat(
+        getRestCommentsNewApi(articleURL, articleName, url, articleKey, json_data.next_page)
+      );
+    }
+
+    return allComments;
+
+  } catch (e) {
+    console.error(`Error fetching additional comments for ${articleURL}: ${e}`);
+    return allComments;
+  }
+}
+
+// --------------------------------------------------
+//旧APIでコメントページを取得する
+function getCommentsFromOldApi(requests, articleURLs) {
+    let pages = [];
+    // 非同期でまとめて取得
+    const responses = UrlFetchApp.fetchAll(requests);
+    for (let i = 0; i < responses.length; i++) {
+        const json_data = JSON.parse(responses[i].getContentText('UTF-8'))['data'];
+        //コメント情報を取得（50件MAX）
+        for (let j = 0; j < json_data['comments'].length; j++) {
+            pages.push({
+                user_urlname: json_data['comments'][j].user.urlname,
+                user_nickname: json_data['comments'][j].user.nickname,
+                user_profile_image_path: json_data['comments'][j].user.user_profile_image_path,
+                comment: json_data['comments'][j].comment,
+                created_at: json_data['comments'][j].created_at,
+                article_url: articleURLs[i][0],
+                article_name: articleURLs[i][2]
+            });
+        }
+        //残コメントがある（50件以上コメントが続いている場合
+        if (json_data.rest_comment_count > 0) {
+            pages = pages.concat(
+                getRestComment(articleURLs[i][0],
+                    articleURLs[i][2],
+                    articleURLs[i][1] + '?max_id=',
+                    json_data['comments'][json_data['comments'].length - 1].id));
+        }
+    }
+    return pages;
+}
+
+// --------------------------------------------------
+//再帰的に残コメントを取得する
+function getRestComment(articleURL, articleName, url, maxID) {
+    const response = UrlFetchApp.fetch(url + maxID);
+    const json_data = JSON.parse(response.getContentText('UTF-8'))['data'];
+    let result = [];
+    //console.log('残コメント：' + json_data.rest_comment_count);
+    //console.log('記事URL：' + articleURL + ';');
+    // JSONデータを生成する
+    for (let i = 0; i < json_data['comments'].length; i++) {
+        result.push({
+            user_urlname: json_data['comments'][i].user.urlname,
+            user_nickname: json_data['comments'][i].user.nickname,
+            comment: json_data['comments'][i].comment,
+            created_at: json_data['comments'][i].created_at,
+            article_url: articleURL,
+            article_name: articleName
+        });
+    }
+    if (json_data.rest_comment_count > 0) {
+        // 残コメントがある場合は、再帰呼び出し
+        const newMaxID = json_data['comments'][json_data['comments'].length - 1].id;
+        //console.log(newMaxID);
+        return result.concat(getRestComment(articleURL, url, newMaxID));
+    } else {
+        // 残コメントがなければ終了
+        return result;
+    }
 }
 
 //JSONを配列[urlname, nickname, cnt, articles]に変換
@@ -165,37 +357,21 @@ function convertUserList(users){
   return result;
 }
 
-// --------------------------------------------------
-//再帰的に残コメントを取得する
-function getRestComment(articleURL, articleName, url, maxID){
-  const response = UrlFetchApp.fetch(url + maxID);
-  const json_data = JSON.parse(response.getContentText('UTF-8'))['data'];
-  let result = [];
+// 重複する「ユーザーIDと記事URL」を削除する関数
+function removeDuplicateArticles(users) {
+  const uniqueUsersMap = new Map();
 
-  //console.log('残コメント：' + json_data.rest_comment_count);
-  //console.log('記事URL：' + articleURL + ';');
+  for (const user of users) {
+    const key = `${user.user_urlname}-${user.article_url}`;
+    
+    // keyがまだMapに存在しない場合のみ、そのコメントをMapに追加
+    if (!uniqueUsersMap.has(key)) {
+      uniqueUsersMap.set(key, user);
+    }
+  }
 
-  // JSONデータを生成する
-  for(let i = 0; i < json_data['comments'].length; i++){
-      result.push({
-          user_urlname: json_data['comments'][i].user.urlname,
-          user_nickname: json_data['comments'][i].user.nickname,
-          comment:json_data['comments'][i].comment,
-          created_at:json_data['comments'][i].created_at,
-          article_url: articleURL,
-          article_name: articleName
-      });
-  }
-  
-  if(json_data.rest_comment_count > 0){
-    // 残コメントがある場合は、再帰呼び出し
-    const newMaxID = json_data['comments'][json_data['comments'].length -1].id;
-    //console.log(newMaxID);
-    return result.concat(getRestComment(articleURL, url, newMaxID));
-  }else{
-    // 残コメントがなければ終了
-    return result;
-  }
+  // Mapの値を配列に変換して返す
+  return Array.from(uniqueUsersMap.values());
 }
 
 // --------------------------------------------------
