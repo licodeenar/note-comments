@@ -58,8 +58,10 @@ function drawTable(jasons, elementId, isJson) {
                     '<div class="note_username_nickname"><a href="' + obj[i].url + '" target="_blank">' + obj[i].nickname + '</a></div>' + 
                     '<div class="note_data_name">' + obj[i].urlname + '</div>' +
                     '</div></div>' + 
-                    '<div class="detail">[<a href="javascript:setDisplay(\'articles_' + i + '\');">詳しくみる</a>] ' + 
-                    '[<a href="?id=' + obj[i].urlname + '&key=' + form.note_key.value + '">コメ集計する</a>]</div>' +
+                    '<div class="detail"><div style="display:flex;justify-content:space-between;">' + 
+                    '<a href="?id=' + obj[i].urlname + '&key=' + form.note_key.value + '">[このユーザで集計]</a> ' + 
+                    '<a href="javascript:setDisplay(\'articles_' + i + '\');">▽詳しくみる</a>' + 
+                    '</div></div>' +
                     '<div class="article_list" id="articles_' + i + '">' +
                     getArticles(obj[i].articles) +
                     '</div></td>' + 
