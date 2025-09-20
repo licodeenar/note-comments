@@ -2,7 +2,7 @@
 function doGet(e){
 
   //リクエストパラメータ名"id"の値を取得する
-  let paramID = e.parameter.id;
+  let paramID = getNoteUsername(e.parameter.id);
   let paramKey = e.parameter.key;
   let result;
   let out;
@@ -30,4 +30,16 @@ function doGet(e){
   out.setContent(JSON.stringify(result));
 
   return out;
+}
+
+//入力値がIDがURLかでIDを抜き出す
+function getNoteUsername(inputString) {
+  // URLだった場合
+  if (inputString.includes("note.com/")) {
+    const parts = inputString.split('/');    
+    return parts[3];
+  }
+  
+  // IDだった場合
+  return inputString;
 }
