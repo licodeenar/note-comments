@@ -37,9 +37,9 @@ function getNoteUserID(inputString) {
   // URLだった場合
   if (inputString.includes("note.com/")) {
     const parts = inputString.split('/');    
-    return parts[3];
+    return parts[3].trim();
   }
   
   // IDだった場合
-  return inputString;
+  return inputString.trim();
 }
