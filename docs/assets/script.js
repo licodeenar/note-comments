@@ -87,8 +87,10 @@ function drawTable(jasons, elementId, isJson) {
             '<span class="note_comment_count"><img src="img/comment.svg" alt="コメント数">' + escapeHtml(obj[i].count) + '</span>' +
             '</div>' +
             '<div class="detail">' +
-            '<a href="' + escapeHtml(aggregateUrl) + '">[このユーザで集計]</a>' +
-            '<a href="javascript:setDisplay(\'articles_' + i + '\');">▽詳しくみる</a>' +
+            '<div class="btn-group">' +
+            '<a class="btn-sub" href="' + escapeHtml(aggregateUrl) + '">このユーザで集計</a>' +
+            '</div>' +
+            '<a class="detail-more" href="javascript:setDisplay(\'articles_' + i + '\');">▽詳しくみる</a>' +
             '</div>' +
             '<div class="article_list" id="articles_' + i + '">' +
             getArticles(obj[i].articles) +

@@ -436,17 +436,52 @@ input[type=checkbox]:checked + .cp_checkbox_data_json::after {
 .detail {
     display: flex;
     justify-content: space-between;
-    margin-top: 6px;
+    align-items: center;
+    gap: 8px;
+    margin-top: 8px;
     font-size: 1.3rem;
 }
 
-.detail a {
+.detail-more {
+    white-space: nowrap;
     color: var(--text-sub);
     text-decoration: none;
 }
 
-.detail a:hover {
+.detail-more:hover {
     color: var(--accent);
+}
+
+.btn-group {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 8px;
+}
+
+@media (max-width: 670px) {
+    .btn-group {
+        flex-direction: column;
+        gap: 4px;
+    }
+}
+
+.btn-sub {
+    display: inline-block;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 50vh;
+    padding: 3px 12px;
+    font-size: 1.2rem;
+    color: var(--text-sub);
+    text-decoration: none;
+    transition: color 0.15s, border-color 0.15s, background 0.15s;
+}
+
+.btn-sub:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+    background: var(--accent-light);
 }
 
 .article_list {
